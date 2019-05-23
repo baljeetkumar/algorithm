@@ -1,0 +1,49 @@
+// spoj CPCRC1C
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+#define mx 100005
+vector<ll>d;
+ll dp[200][2][200],sz;
+
+ll call(ll pos,ll valid,ll sum){
+if(pos==sz)return sum;
+ll &aa=dp[pos][valid][sum];
+if(aa!=-1)return aa;
+ll ss=0;
+int k=valid==1 ? 9:d[pos];
+
+ for(ll i=0;i<=k;i++)
+    ss+=call(pos+1,valid or i<d[pos],sum+i);
+
+return aa=ss;
+}
+
+ll ans(ll a){
+d.clear();
+while(a){
+    d.push_back(a%10);
+    a/=10;
+}
+reverse(d.begin(),d.end());
+ memset(dp,-1,sizeof dp);
+sz=d.size();
+return call(0,0,0);
+}
+
+int main(){
+ios_base::sync_with_stdio(0);
+cin.tie(0);
+ll t,a,b;
+cin>>a>>b;
+while(a!=-1&&b!=-1){
+
+   cout<<ans(b)-ans(a-1)<<endl;
+   cin>>a>>b;
+
+}
+
+return 0;}
