@@ -1,0 +1,110 @@
+struct Point {
+        double x, y;
+};
+bool compare(Point a,Point b)
+{
+        return a.x<b.x || (a.x==b.x && a.y<b.y);
+}
+//Returns positive value if B lies to the left of OA, negative if B lies to the right of OA, 0 if collinear
+double cross(const Point &O, const Point &A, const Point &B)
+{
+        return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+//Returns a list of points on the convex hull
+vector<Point> convex_hull(vector<Point> P)
+{
+        int n = P.size(), k = 0;
+        vector<Point> H(2*n);
+        sort(P.begin(), P.end(),compare);
+        // Build lower hull
+        for (int i = 0; i < n; ++i) {
+                while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0) k--;
+                H[k++] = P[i];
+        }
+
+        // Build upper hull
+        //i starts from n-2 because n-1 is the point which both hulls will have in common
+        //t=k+1 so that the upper hull has atleast two points to begin with
+        for (int i = n-2, t = k+1; i >= 0; i--) {
+                while (k >= t && cross(H[k-2], H[k-1], P[i]) <= 0) k--;
+                H[k++] = P[i];
+        }
+        //the last point of upper hull is same with the fist point of the lower hull
+        H.resize(k-1);
+        return H;
+}
+
+O(nlogn).
+link--- https://www.hackerearth.com/practice/math/geometry/line-sweep-technique/tutorial/
+
+gfg problem convex-hull...
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+struct point{
+ll x,y;
+};
+ll orr(const point &p,const point &q,const point &r){
+return (q.x-p.x)*(r.y-p.y)-(q.y-p.y)*(r.x-p.x);
+}
+bool comp(point p,point q){
+  return (p.x<q.x || (p.x==q.x && p.y<q.y));
+  }
+
+vector<point> con(vector<point>pp){vector<point>p;
+            sort(pp.begin(),pp.end(),comp);
+            p.push_back(pp[0]);
+            for(ll i=1;i<pp.size();i++){
+                if(pp[i].x==pp[i-1].x && pp[i].y==pp[i-1].y )continue;
+                p.push_back(pp[i]);
+            }
+               ll n=p.size();
+               vector<point>h(2*n);
+               if(n<3){h.resize(0);
+                    return h;
+               }
+
+             ll k=0,t;
+             for(ll i=0;i<n;++i){
+                while(k>=2 && orr(h[k-2],h[k-1],p[i])<=0)k--;
+                h[k++]=p[i];
+             }t=k+1;
+             for(ll i=n-2;i>=0;i--){
+                while(k>=t && orr(h[k-2],h[k-1],p[i])<=0)k--;
+                h[k++]=p[i];
+             }
+          h.resize(k-1);sort(h.begin(),h.end(),comp);
+        return h;
+}
+
+
+int main()
+{ios_base::sync_with_stdio(0);cin.tie(0);
+  ll t,n,a,b;
+  vector<point>p;
+     vector<point>v;
+  cin>>t;
+  while(t--){
+
+    cin>>n;
+    for(ll i=0;i<n;i++)
+    {
+        cin>>a>>b;
+        p.push_back({a,b});
+    }
+    v=con(p);
+    if(v.size()==0 || n<3)cout<<-1;
+    else{
+        for(ll i=0;i<v.size();i++){
+            cout<<v[i].x<<" "<<v[i].y;
+            if(i!=v.size()-1)cout<<", ";}
+    }
+    cout<<endl;
+    p.clear();v.clear();
+  }
+
+    return 0;
+}
