@@ -1,0 +1,65 @@
+//// spoj SOCNETC
+
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll p[200005],s[200005],m;
+ll root(ll a){
+while(p[a]!=a){
+    p[a]=p[p[a]];
+    a=p[a];
+}
+return p[a];
+}
+void un(ll a,ll b){
+    a=root(a);
+    b=root(b);
+
+    if(a!=b && s[a]+s[b]<=m){
+        if(s[a]<s[b]) {p[a]=b;
+                        s[b]+=s[a];}
+        else {
+            p[b]=a;
+            s[a]+=s[b];
+
+        }
+    }
+}
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    ll t,n,q;
+    cin>>n>>m>>q;
+    for(ll i=1;i<=n;i++){
+        s[i]=1;
+        p[i]=i;
+    }
+    char z;
+    ll x,y;
+    for(ll i=1;i<=q;i++){
+        cin>>z;
+        if(z=='S'){
+            cin>>x;
+            cout<<s[root(x)]<<endl;
+        }
+        else if(z=='E'){
+            cin>>x>>y;
+            if(root(x)==root(y))cout<<"Yes"<<endl;
+            else cout<<"No"<<endl;
+        }
+        else {
+            cin>>x>>y;
+            un(x,y);
+
+        }
+    }
+
+
+
+
+return 0;
+}
+
