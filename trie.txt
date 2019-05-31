@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+
+struct trie{
+trie* alph[26];
+bool ise;
+};
+
+trie* newnode(){
+trie* temp=new trie();
+for(int i=0;i<26;i++)
+    temp->alph[i]=NULL;
+temp->ise=false;
+return temp;
+}
+
+void ins(trie* root,string key){
+trie* t=root;
+for(int i=0;i<key.length();i++){
+    if(t->alph[key[i]-'a']==NULL){
+        t->alph[key[i]-'a']=newnode();
+    }
+    t=t->alph[key[i]-'a'];
+}
+t->ise=true;
+}
+int find(trie* root,string key){
+trie* t=root;
+for(int i=0;i<key.length();i++){
+    if(t->alph[key[i]-'a']==NULL)return 0;
+        t=t->alph[key[i]-'a'];
+}
+if(t==NULL || t->ise==false)return 0;
+return 1;
+}
+
+int main(){
+
+    ll t,n;string s;
+    cin>>t;
+    while(t--){
+            trie* root=newnode();
+           cin>>n;
+        for(int i=0;i<n;i++){
+               cin>>s;
+            ins(root,s);
+        }
+        cin>>s;
+        cout<<find(root,s)<<endl;
+    }
+
+return 0;
+}
