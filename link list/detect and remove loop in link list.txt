@@ -1,0 +1,38 @@
+int detectloop(Node *head)
+{
+   if(head==NULL)return 0;
+   Node* cur=head,*sec=head;
+   while(cur && sec && sec->next){
+       
+       cur=cur->next;
+       sec=(sec->next)->next;
+       if(cur==sec)return 1;
+      }
+      return 0;
+}
+
+void removeTheLoop(Node *head)
+{     
+     int a=detectloop(head);
+     if(a==0)return;
+     Node *sl=head,*fa=head;
+     while(sl && fa && fa->next){
+         sl=sl->next;
+         fa=fa->next->next;
+         if(sl==fa)break;
+     }
+     int c=1;
+     fa=fa->next;
+     while(sl!=fa){
+         c++;
+         fa=fa->next;
+     }
+     fa=head;sl=head;
+     for(int i=1;i<c;i++){
+         fa=fa->next;
+     }
+     while(sl!=(fa->next)){
+         sl=sl->next;fa=fa->next;
+     }
+     fa->next=NULL;
+}

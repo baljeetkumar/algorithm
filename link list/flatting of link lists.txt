@@ -1,0 +1,25 @@
+Node *merge(Node *h,Node *r){
+    
+    Node* he=NULL;
+    if(h==NULL)return r;
+    else if(r<=NULL)return h;
+   else if(h->data<r->data){
+         he=h;
+        he->bottom=merge(h->bottom,r);
+        return he;
+    }
+ 
+    else{
+        he=r;
+        he->bottom=merge(h,r->bottom);
+        return he;
+    }
+}
+
+Node *flatten(Node *root)
+{      
+     Node *h=root;
+   if(root==NULL)return root;
+   h=merge(root,flatten(root->next));
+   return h;
+}
